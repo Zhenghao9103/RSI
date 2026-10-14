@@ -1,0 +1,41 @@
+{
+  "source_project": "Paper-Agent",
+  "release_date": "2026-10-14",
+  "unchanged_source_sha256": {
+    "backend/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "backend/app/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "backend/app/core/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "backend/app/core/config.py": "45efd227fad2c976e280bcd2581c0127f85de10816037908fc8e091efe8a6787",
+    "backend/app/core/paths.py": "75ebd21a0922fde6f4fb150f6413b34a4bd83d810085894c1521321d1f81ceb6",
+    "backend/app/rag/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "backend/app/rag/vector_store.py": "db0fa96aca27bb7da73835982494e8d0e2852ed5511392c177f5e34112b11e80",
+    "backend/app/services/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "backend/app/services/model_clients.py": "6c955c54e3a1a6d91cd4d0c9640d59c798143c3dc3bfd4cb3729173ef69f3cec",
+    "backend/app/skills/__init__.py": "ab84b9fe97d418ca29b158f56c2d50ab11fcf18f412c52dbdd6af850519c2497",
+    "backend/app/skills/__main__.py": "7a7d9901ff2322ebe9d3066adcead9a2f37af998d668221f223a1c3611450de7",
+    "backend/app/skills/clustering.py": "ffc6d791f143ddd90646fc7f95d4ca276f20889c803ec8c44252e92095fbe70a",
+    "backend/app/skills/config.py": "b467ed72ef6871d2f9e59c30f7695f35b45f933f950562f950d4c0bf3849b421",
+    "backend/app/skills/demo.py": "40a01ca93553aada94d0415ea3de2f77b7269ac9367791fdb6b8f834cd05f597",
+    "backend/app/skills/evolution.py": "e0df8347fca9503714c010c9c8891a98db933cf2b091c03d9644b055e91ffaa6",
+    "backend/app/skills/files.py": "f2fa3a959755a6dd19bd255e0460aa7cb3215b31ff3ce7ca8de3d52fd9e63178",
+    "backend/app/skills/index.py": "4a0b84b1ffb5701c4ac254a8f37d3701cedeb44f1489aaeac19c08319f70ed49",
+    "backend/app/skills/locking.py": "4b8d1878f3f2e4fa542db57f1631b1526b3dc590eacb5c6318878a7945cdb227",
+    "backend/app/skills/manager.py": "489f0636337c076f5438e2fafe00d23c87bad0e12e2f7683b33b58fc4a9509b1",
+    "backend/app/skills/policy.py": "f7da7551692aa96c40d0386f58badf1bcce8001a3269c66100137ead63385381",
+    "backend/app/skills/repository.py": "dd643bc31854fab315eca1de2995004c4ef57ed8e7d34f996dbcae988024c6b1",
+    "docs/skill-pool.md": "fd13aa79a8cd2b0fbe2b6158741d77541a1c0cf157de02e92d65d94b6d7eb9f3",
+    "tests/skill_pool/test_cli.py": "f9b54649d75f385ea67f95a612b0c46ece64792c25f8f6e36668941a29b78424",
+    "tests/skill_pool/test_evolution.py": "cd2980fa256545ead206891c7d3f8beaa10440ceac996fbec919ea71ed20ca24",
+    "tests/skill_pool/test_files_local.py": "88847f70796f1543724b22283a6af2167e56412260b0a2f802ae2c43a219243f",
+    "tests/skill_pool/test_manager.py": "bd3c2ad81c580af502a2c5faa1e15090884ac49eb7649a28048c1efa1b3174de",
+    "tests/skill_pool/test_policy.py": "55a09acf105c87d569907850766826502717cd93c87427e88afd08635d5753ee",
+    "tests/skill_pool/test_storage.py": "a8979d17401d2bc578e62dd1550be7f7980fe7f9796ce6f3402e69b8e5201c50"
+  },
+  "extracted_definitions": {
+    "backend/app/services/llm.py": [
+      "ContextWindowExceededError",
+      "is_context_window_error"
+    ]
+  },
+  "framework_pdf_sha256": "6283bb981e6c37b95391bd8000d904ee566c65f97b789132211d8bc63666cd35"
+}

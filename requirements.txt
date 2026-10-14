@@ -1,0 +1,11 @@
+chromadb==0.5.23
+numpy==1.26.4
+sentence-transformers==3.3.1
+transformers==4.46.3
+torch==2.5.1
+openai==2.41.1
+SQLAlchemy==2.0.50
+PyYAML==6.0.3
+pydantic==2.13.4
+pydantic-settings==2.14.1
+posthog==3.7.5

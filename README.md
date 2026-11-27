@@ -30,3 +30,7 @@ python -m pytest
 `PROCEDURAL_MEMORY_MODE` 支持 `off`、`write`、`flat`、`rsi`。默认 `off`，示例配置为 `rsi`。数据库默认在 `data/memory.db`，可用 `rsi --db path/to/memory.db` 指定。用 `rsi retry` 重试待处理反馈和索引写入，用 `rsi rebuild` 从有效 Skill 重建索引。
 
 Python API 可使用 `with rsi.Memory("data/memory.db") as memory:`，调用 `learn(feedback, previous_answer)`、`ask(question)` 和 `skills()`。测试通过本地临时 SQLite 和注入的模型响应运行，安装 `.[test]` 即可。
+
+## ALFWorld 实验结果
+
+[四组配对消融、写入成本、C/D 复测与逐题数据](experiments/alfworld/README.md)

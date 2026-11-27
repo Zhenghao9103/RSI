@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rsi-procedural-memory"
+version = "0.1.0"
+description = "Standalone procedural memory with ACE-style reflection and RSI retrieval"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "jieba>=0.42.1",
+    "openai>=1.40",
+    "pydantic-settings>=2.4",
+    "snowballstemmer>=2.2",
+    "sqlalchemy>=2.0",
+    "tiktoken>=0.7",
+]
+
+[project.optional-dependencies]
+models = ["sentence-transformers>=3.3.1"]
+test = ["pytest>=8"]
+
+[project.scripts]
+rsi = "rsi.__main__:main"
+rsi-eval = "rsi.benchmark:main"
+
+[tool.setuptools.packages.find]
+include = ["rsi", "rsi.*"]
+
+[tool.setuptools.package-data]
+rsi = ["general_dialogue.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

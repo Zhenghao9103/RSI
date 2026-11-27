@@ -1,51 +1,32 @@
-# Online clustering and two-stage Skill retrieval
+# RSI · 独立自进化记忆
 
-This directory contains the vector-index code used by the no-external-Plan arm of the Skill Evolution experiments. The index assigns each incoming Skill to one cluster with a cosine threshold of 0.7. Retrieval compares a single task embedding with the cluster centroids, selects the top three clusters, and ranks their combined membership by Skill-level cosine similarity to return four hits.
+从 Paper-Agent Memory V3（`faea50b`）提取的本地单人程序性记忆。ACE 风格反思从反馈中提炼 Skill，SQLite 保存版本和待同步操作，RSI 在线归簇并从最多 3 个簇中选取最多 4 条策略给普通问答使用。可以单独测试写入、平面检索和 RSI。
 
-## Quick start
+## 在服务器上运行
 
-Run the following commands from this directory.
+需要 Python 3.11 或更新版本。Linux 示例：
 
-```sh
-python -m pip install -r requirements.txt
+```bash
+git clone https://github.com/Zhenghao9103/RSI.git
+cd RSI
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -e '.[models,test]'
+cp .env.example .env
 ```
 
-Use Skill vectors and task vectors from the same embedding model and configuration. This example uses small vectors so it runs without a model download or API call. The benchmark used BGE embeddings.
+在 `.env` 填写 OpenAI 兼容的 `AGENT_BASE_URL`、`AGENT_API_KEY` 和 `AGENT_MODEL`。本地服务无鉴权时，可使用示例中的占位值 `local`。Reflection、Judge 和生成使用同一个 Agent 模型。BGE-M3 默认从 Hugging Face 加载，已有离线权重时将 `BGE_MODEL` 指向模型目录。若更换向量模型，先重建索引。
 
-```python
-from core.cluster_representations import build_representation
-from core.diagnostic_retrievers import DiagnosticRetriever
-from core.online_clusters import OnlineClusterIndex
-
-index = OnlineClusterIndex(2, threshold=0.7, representatives=1)
-index.add("object-placer", [1.0, 0.0])
-index.add("object-picker", [0.9, 0.2])
-index.add("cabinet-opener", [0.0, 1.0])
-index.add("tool-locator", [-1.0, 0.0])
-
-skill_ids = list(index.membership)
-vectors = {skill_id: index.get_vector(skill_id) for skill_id in skill_ids}
-centroids = build_representation(index.membership, vectors, "centroid")
-retriever = DiagnosticRetriever(
-    skill_ids,
-    [vectors[skill_id] for skill_id in skill_ids],
-    method="hierarchical",
-    view=centroids,
-)
-result = retriever.search([1.0, 0.1], query_text="", route_k=3, top_k=4)
-print([hit.skill_id for hit in result.hits])
+```bash
+rsi learn '以后解释数学概念时，先举一个数字例子，再给定义。'
+rsi skills
+rsi ask '什么是加权平均数？'
+rsi-eval --output reports/server.json
+python -m pytest
 ```
 
-Call `index.add` as new Skill embeddings arrive. Refresh the centroid view and retriever before querying the updated index. The example uses NumPy. The historical GPU evaluation used the optional PyTorch CUDA backend with float64 scoring.
+`rsi ask` 返回回答、实际注入的 Skill ID 与版本、token 数和降级状态。评测使用临时库，依次跑原版、ACE 仅写入、ACE + Flat、ACE + RSI。两种检索共享冻结的 Skill 快照，结果 JSON 包含逐题回答、命中和耗时。可用 `--cases` 指定与内置 [样例](rsi/general_dialogue.json) 同格式的数据。内置六题用于端到端对照。
 
-## Historical ALFWorld comparison
+`PROCEDURAL_MEMORY_MODE` 支持 `off`、`write`、`flat`、`rsi`。默认 `off`，示例配置为 `rsi`。数据库默认在 `data/memory.db`，可用 `rsi --db path/to/memory.db` 指定。用 `rsi retry` 重试待处理反馈和索引写入，用 `rsi rebuild` 从有效 Skill 重建索引。
 
-At the 750-Skill checkpoint, the original-query two-stage arm matched the full-library vector ranking for all 140 tasks while scoring an average of 75.54 Skill vectors in its second stage. GoS and the no-Plan arm each completed 132 of 140 tasks. Adding the 500-to-750 maintenance batch to execution gives 5,459,494 tokens for GoS and 3,457,156 for the no-Plan arm, a 36.68% reduction under that accounting. GoS used dynamic retrieval, while the no-Plan arm used a fixed initial candidate pool.
-
-The release accepts precomputed vectors and includes the index, ranker, and regression tests. Full benchmark reproduction also requires the separate BGE encoding, Skill library, ALFWorld, Agent, and GoS experiment assets. The inherited snapshot helpers expect a writable path on the experiment data disk under `/mnt`.
-
-To run the original regression tests, install pytest and PyTorch in the same environment. PyTorch is used by the CUDA availability test. Set the temporary directory to a writable location supported by the snapshot helpers.
-
-```sh
-python -m pytest -q -p no:cacheprovider --basetemp /mnt/path-to-rsi-test-tmp tests
-```
+Python API 可使用 `with rsi.Memory("data/memory.db") as memory:`，调用 `learn(feedback, previous_answer)`、`ask(question)` 和 `skills()`。测试通过本地临时 SQLite 和注入的模型响应运行，安装 `.[test]` 即可。
